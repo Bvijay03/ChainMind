@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainMind Audit — Cross-Chain DeFi Reconciliation Dashboard</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="glass">
+      <div class="logo-area">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">
+          <h1>ChainMind Audit</h1>
+          <span>Cross-Chain DeFi Compliance Engine</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          <span>Sepolia & Chain B: Live</span>
+        </div>
+        <button id="refreshBtn" class="tab-btn" title="Refresh Data">🔄 Refresh</button>
+      </div>
+    </header>
+
+    <!-- KPI Metric Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card glass">
+        <div class="kpi-header">
+          <span class="kpi-title">Ingested Events</span>
+          <span class="kpi-icon">📥</span>
+        </div>
+        <div class="kpi-value" id="kpiTotalEvents">--</div>
+        <div class="kpi-subtitle">
+          <span class="kpi-badge badge-cyan" id="kpiPending">0 Pending</span>
+          <span>Dual-Chain Stream</span>
+        </div>
+      </div>
+
+      <div class="kpi-card glass">
+        <div class="kpi-header">
+          <span class="kpi-title">Reconciled Pairs</span>
+          <span class="kpi-icon">⚖️</span>
+        </div>
+        <div class="kpi-value" id="kpiTotalRecons">--</div>
+        <div class="kpi-subtitle">
+          <span class="kpi-badge badge-green" id="kpiMatched">0 Matched</span>
+          <span id="kpiFlagged">0 Flagged</span>
+        </div>
+      </div>
+
+      <div class="kpi-card glass">
+        <div class="kpi-header">
+          <span class="kpi-title">Avg Latency</span>
+          <span class="kpi-icon">⚡</span>
+        </div>
+        <div class="kpi-value" id="kpiLatency">1.45s</div>
+        <div class="kpi-subtitle">
+          <span class="kpi-badge badge-green">SLA &lt; 3.0s: PASSED</span>
+        </div>
+      </div>
+
+      <div class="kpi-card glass">
+        <div class="kpi-header">
+          <span class="kpi-title">On-Chain Anchors</span>
+          <span class="kpi-icon">🛡️</span>
+        </div>
+        <div class="kpi-value" id="kpiAnchored">--</div>
+        <div class="kpi-subtitle">
+          <span class="kpi-badge badge-purple">Gas Saved: 92%</span>
+          <span>Event-Log Notary</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Interactive Cross-Chain Swap Simulator -->
+    <div class="simulator-panel glass">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>⚡</span>
+          <span>Interactive Cross-Chain Bridge Simulator</span>
+        </div>
+        <span class="mono" style="font-size: 11px; color: var(--text-muted);">Real-time Ingestion & Reconciliation Sandbox</span>
+      </div>
+
+      <form id="simForm" class="sim-form">
+        <div class="form-group" style="grid-column: span 1;">
+          <label>Sender Address (Ethereum)</label>
+          <input type="text" id="simSender" class="form-control" value="0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18">
+        </div>
+
+        <div class="form-group">
+          <label>Value (ETH)</label>
+          <input type="number" id="simValue" class="form-control" value="1.25" step="0.05" min="0.01">
+        </div>
+
+        <div class="form-group">
+          <label>Scenario / Slippage</label>
+          <select id="simScenario" class="form-control">
+            <option value="1.0">Exact Match (0% Fee)</option>
+            <option value="0.995">Fuzzy Value (0.5% Bridge Fee)</option>
+            <option value="0.98">Fuzzy Value (2.0% Slippage)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Relay Delay (Sec)</label>
+          <input type="number" id="simDelay" class="form-control" value="2" min="1" max="10">
+        </div>
+
+        <button type="submit" id="simSubmitBtn" class="btn-primary">
+          <span>⚡ Execute Swap</span>
+        </button>
+      </form>
+
+      <!-- Visual Pipeline Sequence -->
+      <div class="pipeline-visual">
+        <div class="step-card" id="step1">
+          <div class="step-num">Step 1</div>
+          <div class="step-name">Sepolia Ingestion</div>
+          <div class="step-desc">BridgeInitiated Event</div>
+        </div>
+        <div class="step-card" id="step2">
+          <div class="step-num">Step 2</div>
+          <div class="step-name">AI Intent Extraction</div>
+          <div class="step-desc">Local LLM / Fallback</div>
+        </div>
+        <div class="step-card" id="step3">
+          <div class="step-num">Step 3</div>
+          <div class="step-name">Reconciliation Match</div>
+          <div class="step-desc">4-Factor Heuristic</div>
+        </div>
+        <div class="step-card" id="step4">
+          <div class="step-num">Step 4</div>
+          <div class="step-name">On-Chain Anchoring</div>
+          <div class="step-desc">ChainMindAudit.sol</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Audit Stream Table -->
+    <div class="table-panel glass">
+      <div class="table-header-row">
+        <div class="panel-title">
+          <span>📋</span>
+          <span>Live Compliance Audit Stream</span>
+        </div>
+        <div class="tabs">
+          <button class="tab-btn active" data-filter="ALL" id="tabAll">All Records</button>
+          <button class="tab-btn" data-filter="MATCHED" id="tabMatched">Matched</button>
+          <button class="tab-btn" data-filter="FLAGGED" id="tabFlagged">Flagged / Anomalies</button>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Sender</th>
+              <th>Source Tx (Sepolia)</th>
+              <th>Dest Tx (Chain B)</th>
+              <th>Value (ETH)</th>
+              <th>Δ Time</th>
+              <th>Confidence</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">Loading live audit data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Audit Record Details</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div id="modalBody">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

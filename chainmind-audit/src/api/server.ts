@@ -1,12 +1,17 @@
 import express, { Express } from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import path from "path";
+import { fileURLToPath } from "url";
 import { EventRepository } from "../storage/event-repository.js";
 import { ReconRepository } from "../storage/recon-repository.js";
 import { createReconciliationRouter } from "./routes/reconciliation.js";
 import { errorHandler } from "./middleware/error-handler.js";
 import { config } from "../config.js";
 import { logger } from "../utils/logger.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function createServer(
   eventRepo: EventRepository,
@@ -18,7 +23,11 @@ export function createServer(
   app.use(cors());
   app.use(express.json());
 
-  // Rate limiter
+  // Serve static UI dashboard files
+  const publicDir = path.resolve(__dirname, "../../public");
+  app.use(express.static(publicDir));
+
+  // Rate limiter (exempt static files and health check)
   const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: config.apiRateLimitPerMin,
@@ -32,7 +41,7 @@ export function createServer(
       },
     },
   });
-  app.use(limiter);
+  app.use("/api", limiter);
 
   // Health check endpoint
   app.get("/health", (req, res) => {
