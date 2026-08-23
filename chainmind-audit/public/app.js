@@ -56,7 +56,7 @@ function renderTable() {
     tbody.innerHTML = `
       <tr>
         <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 30px;">
-          No audit records yet. Click "⚡ Execute Swap" above to simulate a transaction!
+          No audit records yet. Click "⚡ Run Scenario" above to simulate a transaction!
         </td>
       </tr>
     `;
@@ -172,7 +172,7 @@ document.getElementById('simForm').addEventListener('submit', async (e) => {
 
   const sender = document.getElementById('simSender').value;
   const valueEth = document.getElementById('simValue').value;
-  const slippage = parseFloat(document.getElementById('simScenario').value);
+  const scenario = document.getElementById('simScenario').value;
   const delay = parseInt(document.getElementById('simDelay').value, 10);
   const btn = document.getElementById('simSubmitBtn');
 
@@ -190,7 +190,7 @@ document.getElementById('simForm').addEventListener('submit', async (e) => {
         sender,
         value_eth: valueEth,
         delay_seconds: delay,
-        slippage_ratio: slippage,
+        mode: scenario,
       }),
     });
 
@@ -210,7 +210,7 @@ document.getElementById('simForm').addEventListener('submit', async (e) => {
 
       setTimeout(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span>⚡ Execute Swap</span>';
+        btn.innerHTML = '<span>⚡ Run Scenario</span>';
         clearSteps();
         fetchSummary();
       }, 3500);
@@ -218,7 +218,7 @@ document.getElementById('simForm').addEventListener('submit', async (e) => {
   } catch (err) {
     console.error('Simulation error:', err);
     btn.disabled = false;
-    btn.innerHTML = '<span>⚡ Execute Swap</span>';
+    btn.innerHTML = '<span>⚡ Run Scenario</span>';
     clearSteps();
   }
 });

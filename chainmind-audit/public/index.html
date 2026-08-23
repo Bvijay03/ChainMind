@@ -88,9 +88,9 @@
       <div class="panel-header">
         <div class="panel-title">
           <span>⚡</span>
-          <span>Interactive Cross-Chain Bridge Simulator</span>
+          <span>Interactive Cross-Chain Test Scenarios</span>
         </div>
-        <span class="mono" style="font-size: 11px; color: var(--text-muted);">Real-time Ingestion & Reconciliation Sandbox</span>
+        <span class="mono" style="font-size: 11px; color: var(--text-muted);">Demonstrate Success, Slippage, Timeouts & Fraud Conflicts</span>
       </div>
 
       <form id="simForm" class="sim-form">
@@ -105,11 +105,12 @@
         </div>
 
         <div class="form-group">
-          <label>Scenario / Slippage</label>
+          <label>Test Case Scenario</label>
           <select id="simScenario" class="form-control">
-            <option value="1.0">Exact Match (0% Fee)</option>
-            <option value="0.995">Fuzzy Value (0.5% Bridge Fee)</option>
-            <option value="0.98">Fuzzy Value (2.0% Slippage)</option>
+            <option value="EXACT">🟢 Test Case 1: Exact Match (Success)</option>
+            <option value="FUZZY">🟡 Test Case 2: Fuzzy Value (0.5% Slippage / Fee)</option>
+            <option value="INTENT_CONFLICT">🔴 Test Case 3: Intent Conflict (Incompatible Trade)</option>
+            <option value="TIMEOUT">⚠️ Test Case 4: No Match / Timeout (Orphan Leg)</option>
           </select>
         </div>
 
@@ -119,7 +120,7 @@
         </div>
 
         <button type="submit" id="simSubmitBtn" class="btn-primary">
-          <span>⚡ Execute Swap</span>
+          <span>⚡ Run Scenario</span>
         </button>
       </form>
 
