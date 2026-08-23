@@ -1,0 +1,29 @@
+# Node
+node_modules/
+dist/
+
+# Env & Keys
+.env
+.env.local
+
+# SQLite Database
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Hardhat & Solidity
+cache/
+artifacts/
+typechain-types/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

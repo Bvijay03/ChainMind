@@ -1,0 +1,28 @@
+[
+  {
+    "description": "Standard cross-chain bridge transfer - Leg 1 (Sepolia)",
+    "chainId": 11155111,
+    "txHash": "0xa1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4d5e6f708192a3b4c5d6e7f801",
+    "blockNumber": 6501234,
+    "blockTimestamp": 1724400000,
+    "sender": "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
+    "receiver": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+    "valueWei": "1000000000000000000",
+    "inputData": "0x8b95dd710000000000000000000000005b38da6a701c568545dcfcb03fcb875f56beddc40000000000000000000000000000000000000000000000000000000000004268",
+    "eventName": "BridgeInitiated",
+    "confirmations": 15
+  },
+  {
+    "description": "Standard cross-chain bridge transfer - Leg 2 (Chain B Counterpart)",
+    "chainId": 17000,
+    "txHash": "0xb2c3d4e5f60718293a4b5c6d7e8f901a2b3c4d5e6f708192a3b4c5d6e7f801a2",
+    "blockNumber": 5409876,
+    "blockTimestamp": 1724400030,
+    "sender": "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
+    "receiver": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
+    "valueWei": "1000000000000000000",
+    "inputData": "0x4e71d92d000000000000000000000000742d35cc6634c0532925a3b844bc9e7595f2bd18",
+    "eventName": "BridgeCompleted",
+    "confirmations": 12
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "name": "chainmind-audit",
+  "version": "1.0.0",
+  "description": "Cross-chain DeFi reconciliation system with Gen-AI intent extraction",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "demo": "tsx src/demo-runner.ts",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "compile": "npx hardhat compile --config contracts/hardhat.config.cjs",
+    "test:contracts": "npx hardhat test contracts/test/ChainMindAudit.test.cjs --config contracts/hardhat.config.cjs",
+    "deploy": "npx hardhat run contracts/scripts/deploy.ts --network sepolia --config contracts/hardhat.config.cjs",
+    "deploy:mocks": "npx hardhat run contracts/scripts/deploy-mocks.ts --network sepolia --config contracts/hardhat.config.cjs"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0",
+    "express": "^4.21.0",
+    "better-sqlite3": "^11.0.0",
+    "uuid": "^10.0.0",
+    "pino": "^9.0.0",
+    "pino-pretty": "^11.0.0",
+    "dotenv": "^16.4.0",
+    "express-rate-limit": "^7.4.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "tsx": "^4.19.0",
+    "@types/express": "^5.0.0",
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/uuid": "^10.0.0",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.0.0",
+    "hardhat": "^2.22.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}
