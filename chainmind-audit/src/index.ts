@@ -96,12 +96,15 @@ async function bootstrap() {
       const sourceTxHash = "0x" + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("");
       const now = Math.floor(Date.now() / 1000);
 
+      // In TIMEOUT mode, backdate blockTimestamp by 1000s (>900s tolerance window) so TimeoutWatcher triggers immediately
+      const blockTimestamp = mode === "TIMEOUT" ? (now - 1000) : now;
+
       // 1. Emit Source Chain Event (Sepolia BridgeInitiated)
       const sourceEvent: RawBlockchainEvent = {
         chainId: 11155111,
         txHash: sourceTxHash,
         blockNumber: 6543200 + Math.floor(Math.random() * 100),
-        blockTimestamp: now,
+        blockTimestamp,
         sender,
         receiver: config.bridgeSenderAddress || "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
         valueWei,
@@ -114,11 +117,11 @@ async function bootstrap() {
 
       // 2. Handle Scenario Modes
       if (mode === "TIMEOUT") {
-        // Scenario 3: Leg 2 never arrives ➔ will be flagged as FLAGGED_TIMEOUT by TimeoutWatcher
+        // Scenario 4: Leg 2 never arrives ➔ TimeoutWatcher immediately catches it on next tick
         res.json({
           success: true,
           scenario: "TIMEOUT",
-          message: "Orphan transaction initiated. No counterpart will be sent on Chain B (simulating relayer drop).",
+          message: "Orphan transaction initiated. No counterpart sent on Chain B (simulating dropped relayer). Flagged as FLAGGED_TIMEOUT.",
           source_tx_hash: sourceTxHash,
           sender,
           value_eth: valueEth,
@@ -127,7 +130,7 @@ async function bootstrap() {
       }
 
       if (mode === "INTENT_CONFLICT") {
-        // Scenario 4: Leg 2 arrives with incompatible intent (e.g. SWAP selector 0x38ed1739 instead of BRIDGE_COMPLETE)
+        // Scenario 3: Leg 2 arrives with incompatible intent (SWAP selector 0x38ed1739 instead of BRIDGE_COMPLETE)
         setTimeout(async () => {
           const fakeTxHashB = ethers.keccak256(ethers.toUtf8Bytes(`chainB-conflict-${sourceTxHash}-${Date.now()}`));
           const conflictEvent: RawBlockchainEvent = {
@@ -148,7 +151,7 @@ async function bootstrap() {
         res.json({
           success: true,
           scenario: "INTENT_CONFLICT",
-          message: "Conflicting trade initiated. Chain B counterpart will emit a SWAP instead of BRIDGE_COMPLETE.",
+          message: "Conflicting trade initiated. Chain B counterpart emits a SWAP instead of BRIDGE_COMPLETE. Flagged as FLAGGED_INTENT_CONFLICT.",
           source_tx_hash: sourceTxHash,
           counterpart_eta_seconds: delaySeconds,
           sender,
